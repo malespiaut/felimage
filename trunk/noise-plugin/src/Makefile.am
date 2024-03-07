@@ -46,9 +46,7 @@ dist_data_DATA=\
 
 AM_CPPFLAGS = \
 	-DLOCALEDIR=\""$(LOCALEDIR)"\"		\
-	-DDATADIR=\""$(DATADIR)"\"
-
-INCLUDES =\
+	-DDATADIR=\""$(DATADIR)"\" \
 	-I$(top_srcdir)		\
 	@GIMP_CFLAGS@		\
 	-I$(includedir)
