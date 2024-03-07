@@ -83,4 +83,3 @@
 /* Min -2.710768  Max 2.498051  Range 5.208820  Mid -0.106359  Avg -0.002401 */
 #define CELL5_5D_MID -0.106359
 #define CELL5_5D_FAC 0.191982
-
