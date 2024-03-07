@@ -34,9 +34,9 @@
 int
 SaveConfig(const char* filename, PluginState* state)
 {
-  FILE* file;
-  char* gradient;
-  char* loc;
+  FILE* file = NULL;
+  char* gradient = NULL;
+  char* loc = NULL;
 
   file = fopen(filename, "wt");
   if (!file)

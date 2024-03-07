@@ -146,8 +146,8 @@ static GimpParamDef args[] =
 static void
 query(void)
 {
-  gchar* help_path;
-  gchar* help_uri;
+  gchar* help_path = NULL;
+  gchar* help_uri = NULL;
 
   gimp_plugin_domain_register(PLUGIN_NAME, LOCALEDIR);
 
@@ -178,8 +178,8 @@ query(void)
 gchar*
 GetMD5Text(guchar* md5)
 {
-  static gchar txt[32];
-  int i;
+  static gchar txt[32] = {0};
+  int i = 0;
   gchar a[] = "0123456789ABCDEF";
 
   for (i = 0; i < 16; i++)
@@ -204,7 +204,7 @@ SetStateToDefaults(PluginState* state)
 void
 StoreGradientName(PluginState* state, const gchar* name)
 {
-  gchar* grad_name;
+  gchar* grad_name = NULL;
 
   if (name)
   {
@@ -222,12 +222,12 @@ StoreGradientName(PluginState* state, const gchar* name)
 gchar*
 GetGradientName(const guchar* gradient_hash)
 {
-  gchar** gradient;
-  guchar md5[16];
+  gchar** gradient = NULL;
+  guchar md5[16] = {0};
   gchar* grad_name = NULL;
   gchar* final_name = NULL;
-  gint tot_gradients;
-  int i, j;
+  gint tot_gradients = 0;
+  int i = 0, j = 0;
 
   if (!gradient_hash)
     return NULL;
@@ -278,12 +278,12 @@ run(const gchar* name,
     GimpParam** return_vals)
 {
 
-  static GimpParam ret_val[1];
-  static PluginState state;
+  static GimpParam ret_val[1] = {0};
+  static PluginState state = {0};
 
-  GimpDrawable* drawable;
-  gint32 image_ID;
-  GimpRunMode run_mode;
+  GimpDrawable* drawable = NULL;
+  gint32 image_ID = 0;
+  GimpRunMode run_mode = {0};
   GimpPDBStatusType status = GIMP_PDB_SUCCESS;
 
   *nreturn_vals = 1;
@@ -383,7 +383,7 @@ MAIN()
 int
 main(int argc, char* argv[])
 {
-  PluginState state;
+  PluginState state = {0};
 
   ParseConfig(&state, "seed : 12, size_x:10\n");
 

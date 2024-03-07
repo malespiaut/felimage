@@ -111,54 +111,54 @@ typedef struct
   GtkWidget* preset_path;
 } PresetChangeCallbackData;
 
-GtkWidget* dlg;
-GtkWidget* main_box;
-GtkWidget* left_box;
-GtkWidget* hbox;
-GtkWidget* seed;
-GtkWidget* ebox;
-GtkWidget* basis;
-GtkWidget* multifractal;
-GtkWidget* mapping;
-GtkWidget* scale;
-GtkWidget* notebook;
-GtkWidget* page_basis;
-GtkWidget* page_colors;
-GtkWidget* page_output;
-GtkWidget* page_presets;
-GtkObject* octaves;
-GtkObject* lacuna;
-GtkObject* hurst;
-GtkWidget* table;
-GtkWidget* gradient;
-GtkWidget* col_gradient;
-GtkWidget* col_channels;
-GtkWidget* col_image;
-GtkWidget* phase;
-GtkWidget* ign_phase;
-GtkObject* pinch;
-GtkObject* bias;
-GtkObject* gain;
-GtkWidget* function;
-GtkWidget* frequency;
-GtkObject* shift;
-GtkWidget* reverse;
-GtkWidget* preview;
-GdkPixbuf* link_icon_pixbuf;
-GtkWidget* link_icon;
-GtkWidget* channel_r;
-GtkWidget* channel_g;
-GtkWidget* channel_b;
-GtkWidget* channel_a;
-GtkWidget* color_src;
-GtkWidget* warp_size;
-GtkWidget* warp_quality;
-GtkWidget* edge_action;
-GtkObject* warp_caustics;
-GtkWidget* preset_path;
-GtkWidget* preset_combo;
-GtkWidget* preset_save;
-GtkTooltips* tooltips;
+GdkPixbuf* link_icon_pixbuf = NULL;
+GtkObject* bias = NULL;
+GtkObject* gain = NULL;
+GtkObject* hurst = NULL;
+GtkObject* lacuna = NULL;
+GtkObject* octaves = NULL;
+GtkObject* pinch = NULL;
+GtkObject* shift = NULL;
+GtkObject* warp_caustics = NULL;
+GtkTooltips* tooltips = NULL;
+GtkWidget* basis = NULL;
+GtkWidget* channel_a = NULL;
+GtkWidget* channel_b = NULL;
+GtkWidget* channel_g = NULL;
+GtkWidget* channel_r = NULL;
+GtkWidget* col_channels = NULL;
+GtkWidget* col_gradient = NULL;
+GtkWidget* col_image = NULL;
+GtkWidget* color_src = NULL;
+GtkWidget* dlg = NULL;
+GtkWidget* ebox = NULL;
+GtkWidget* edge_action = NULL;
+GtkWidget* frequency = NULL;
+GtkWidget* function = NULL;
+GtkWidget* gradient = NULL;
+GtkWidget* hbox = NULL;
+GtkWidget* ign_phase = NULL;
+GtkWidget* left_box = NULL;
+GtkWidget* link_icon = NULL;
+GtkWidget* main_box = NULL;
+GtkWidget* mapping = NULL;
+GtkWidget* multifractal = NULL;
+GtkWidget* notebook = NULL;
+GtkWidget* page_basis = NULL;
+GtkWidget* page_colors = NULL;
+GtkWidget* page_output = NULL;
+GtkWidget* page_presets = NULL;
+GtkWidget* phase = NULL;
+GtkWidget* preset_combo = NULL;
+GtkWidget* preset_path = NULL;
+GtkWidget* preset_save = NULL;
+GtkWidget* preview = NULL;
+GtkWidget* reverse = NULL;
+GtkWidget* scale = NULL;
+GtkWidget* seed = NULL;
+GtkWidget* table = NULL;
+GtkWidget* warp_quality = NULL;
+GtkWidget* warp_size = NULL;
 
 CallbackData cb_data;
 
@@ -199,8 +199,7 @@ static void PreviewUpdate(GimpPreview* preview, gpointer user_data);
 static void
 NewHSeparator(GtkBox* parent)
 {
-  GtkWidget* sep;
-  sep = gtk_hseparator_new();
+  GtkWidget* sep = gtk_hseparator_new();
   gtk_box_pack_start(parent, sep, FALSE, FALSE, 0);
 }
 
@@ -208,7 +207,7 @@ NewHSeparator(GtkBox* parent)
 static void
 MakeFullPresetName(char** filename)
 {
-  char* tmp;
+  char* tmp = NULL;
   if (g_str_has_suffix(*filename, PRESET_EXTENSION))
     return;
   tmp = g_malloc(strlen(*filename) + 5);
@@ -230,9 +229,9 @@ static int
 MakePath(const char* base, ...)
 {
   va_list arg, arg2;
-  char *path, *tmp;
-  char* dir;
-  GSList *created, *item;
+  char *path = NULL, *tmp = NULL;
+  char* dir = NULL;
+  GSList *created = NULL, *item = NULL;
   va_start(arg, base);
   va_copy(arg2, arg);
 
@@ -312,13 +311,10 @@ MakePath(const char* base, ...)
 static char*
 GetPresetBasePath()
 {
-  const char* gd;
-  char* path;
-  int r;
+  const char* gd = gimp_directory();
+  char* path = NULL;
+  int r = -1;
 
-  gd = gimp_directory();
-
-  r = -1;
   if (g_file_test(gd, G_FILE_TEST_IS_DIR))
   {
     r = MakePath(gd, "plug-ins", "felimage", "noise", NULL);
@@ -346,15 +342,15 @@ GetPresetBasePath()
 int
 LoadPresetsPath(const char* path, GtkWidget* combobox, const char* selected)
 {
-  GDir* dir;
-  char* p_name;
-  FILE* file;
-  char* buffer;
+  GDir* dir = NULL;
+  char* p_name = NULL;
+  FILE* file = NULL;
+  char* buffer = NULL;
   const char* name;
-  int selected_idx;
-  int i;
+  int selected_idx = 0;
+  int i = 0;
   /* we need a list to sort the items before inserting them in the combo */
-  GSList *name_list, *item;
+  GSList *name_list = NULL, *item = NULL;
 
   dir = g_dir_open(path, 0, NULL);
 
@@ -430,9 +426,9 @@ LoadPresetsPath(const char* path, GtkWidget* combobox, const char* selected)
 void
 SetWidgetsFromState(PluginState* state)
 {
-  GtkWidget* group[4];
-  char* grad_name;
-  int i;
+  GtkWidget* group[4] = {NULL};
+  char* grad_name = NULL;
+  int i = 0;
 
   gtk_toggle_button_set_active(GIMP_RANDOM_SEED_TOGGLE(seed), state->random_seed);
   if (!state->random_seed)
@@ -518,7 +514,7 @@ dialog(gint32 image_ID,
        PluginState* state)
 {
 
-  int i;
+  int i = 0;
 
   const char* channel_list1[] = {
     _("Channel 1"), _("Channel 1 inverse"), _("Channel 2"), _("Channel 2 inverse"), _("Channel 3"), _("Channel 3 inverse"), _("Channel 4"), _("Channel 4 inverse"), _("Light"), _("Mid"), _("Dark")};
@@ -526,19 +522,19 @@ dialog(gint32 image_ID,
   const char* channel_list2[] = {
     _("Channel 1"), _("Channel 1 inverse"), _("Channel 2"), _("Channel 2 inverse"), _("Channel 3"), _("Channel 3 inverse"), _("Channel 4"), _("Channel 4 inverse"), _("Solid")};
 
-  gchar* grad_name;
+  gchar* grad_name = NULL;
   tooltips = gtk_tooltips_new();
 
   ColorChangeCallbackData col_change_cb_data;
   PhaseEnableCallbackData phase_enable_cb_data;
   PresetChangeCallbackData preset_change_cb_data;
 
-  char* path;
+  char* path = NULL;
 
   gboolean run = FALSE;
-  GimpUnit unit;
-  gdouble xres, yres;
-  RenderData rdat;
+  GimpUnit unit = {0};
+  gdouble xres = NAN, yres = NAN;
+  RenderData rdat = {0};
   PluginState tmp_state = *state;
 
   InitRenderData(&rdat);
@@ -967,7 +963,7 @@ OnBasisChange(GimpIntComboBox* widget, gpointer user_data)
   PluginState* state = ((CallbackData*)user_data)->state;
   GimpPreview* preview = ((CallbackData*)user_data)->preview;
   RenderData* rdat = ((CallbackData*)user_data)->rdat;
-  gint tmp;
+  gint tmp = 0;
 
   gimp_int_combo_box_get_active(widget, &tmp);
   state->basis = tmp;
@@ -984,7 +980,7 @@ OnMultifractalChange(GimpIntComboBox* widget, gpointer user_data)
   PluginState* state = ((CallbackData*)user_data)->state;
   GimpPreview* preview = ((CallbackData*)user_data)->preview;
   RenderData* rdat = ((CallbackData*)user_data)->rdat;
-  gint tmp;
+  gint tmp = 0;
 
   gimp_int_combo_box_get_active(widget, &tmp);
   state->multifractal = tmp;
@@ -1033,7 +1029,7 @@ OnMappingChange(GimpIntComboBox* widget, gpointer user_data)
   PluginState* state = ((CallbackData*)user_data)->state;
   GimpPreview* preview = ((CallbackData*)user_data)->preview;
   RenderData* rdat = ((CallbackData*)user_data)->rdat;
-  gint tmp;
+  gint tmp = 0;
 
   gimp_int_combo_box_get_active(widget, &tmp);
   state->mapping = tmp;
@@ -1134,7 +1130,7 @@ OnFunctionChange(GimpIntComboBox* widget, gpointer user_data)
   PluginState* state = ((CallbackData*)user_data)->state;
   GimpPreview* preview = ((CallbackData*)user_data)->preview;
   RenderData* rdat = ((CallbackData*)user_data)->rdat;
-  gint tmp;
+  gint tmp = 0;
 
   gimp_int_combo_box_get_active(widget, &tmp);
   state->function = tmp;
@@ -1187,8 +1183,8 @@ OnColorSrcChange(GimpIntComboBox* widget, gpointer user_data)
 {
   ColorChangeCallbackData* data = (ColorChangeCallbackData*)user_data;
   CallbackData* cb_data = data->cb_data;
-  gint col_src;
-  int i;
+  gint col_src = 0;
+  int i = 0;
 
   gimp_int_combo_box_get_active(widget, &col_src);
   cb_data->state->color_src = col_src;
@@ -1217,7 +1213,7 @@ OnRedChannelChange(GimpIntComboBox* widget, gpointer user_data)
   PluginState* state = ((CallbackData*)user_data)->state;
   GimpPreview* preview = ((CallbackData*)user_data)->preview;
   RenderData* rdat = ((CallbackData*)user_data)->rdat;
-  gint tmp;
+  gint tmp = 0;
 
   gimp_int_combo_box_get_active(widget, &tmp);
   state->channel[0] = tmp;
@@ -1233,7 +1229,7 @@ OnGreenChannelChange(GimpIntComboBox* widget, gpointer user_data)
   PluginState* state = ((CallbackData*)user_data)->state;
   GimpPreview* preview = ((CallbackData*)user_data)->preview;
   RenderData* rdat = ((CallbackData*)user_data)->rdat;
-  gint tmp;
+  gint tmp = 0;
 
   gimp_int_combo_box_get_active(widget, &tmp);
   state->channel[1] = tmp;
@@ -1249,7 +1245,7 @@ OnBlueChannelChange(GimpIntComboBox* widget, gpointer user_data)
   PluginState* state = ((CallbackData*)user_data)->state;
   GimpPreview* preview = ((CallbackData*)user_data)->preview;
   RenderData* rdat = ((CallbackData*)user_data)->rdat;
-  gint tmp;
+  gint tmp = 0;
 
   gimp_int_combo_box_get_active(widget, &tmp);
   state->channel[2] = tmp;
@@ -1265,7 +1261,7 @@ OnAlphaChannelChange(GimpIntComboBox* widget, gpointer user_data)
   PluginState* state = ((CallbackData*)user_data)->state;
   GimpPreview* preview = ((CallbackData*)user_data)->preview;
   RenderData* rdat = ((CallbackData*)user_data)->rdat;
-  gint tmp;
+  gint tmp = 0;
 
   gimp_int_combo_box_get_active(widget, &tmp);
   state->channel[(((CallbackData*)user_data)->bpp <= 2) ? 1 : 3] = tmp;
@@ -1297,7 +1293,7 @@ OnWarpQualityChange(GimpIntComboBox* widget, gpointer user_data)
   PluginState* state = ((CallbackData*)user_data)->state;
   GimpPreview* preview = ((CallbackData*)user_data)->preview;
   RenderData* rdat = ((CallbackData*)user_data)->rdat;
-  gint tmp;
+  gint tmp = 0;
 
   gimp_int_combo_box_get_active(widget, &tmp);
   state->warp_quality = tmp;
@@ -1314,7 +1310,7 @@ OnEdgeActionChange(GimpIntComboBox* widget, gpointer user_data)
   PluginState* state = ((CallbackData*)user_data)->state;
   GimpPreview* preview = ((CallbackData*)user_data)->preview;
   RenderData* rdat = ((CallbackData*)user_data)->rdat;
-  gint tmp;
+  gint tmp = 0;
 
   gimp_int_combo_box_get_active(widget, &tmp);
   state->edge_action = tmp;
@@ -1343,7 +1339,7 @@ OnWarpCausticsChange(GtkAdjustment* adjustment, gpointer user_data)
 static void
 OnPresetPathChange(GimpFileEntry* entry, gpointer user_data)
 {
-  char* path;
+  char* path = NULL;
   path = gimp_file_entry_get_filename(entry);
   LoadPresetsPath(path, ((PresetChangeCallbackData*)user_data)->preset_combo, NULL);
   g_free(path);
@@ -1353,10 +1349,10 @@ static void
 OnPresetChange(GtkComboBox* widget, gpointer user_data)
 {
   CallbackData* cb_data = ((PresetChangeCallbackData*)user_data)->cb_data;
-  char* path;
-  char* file;
-  char* full_path;
-  int r;
+  char* path = NULL;
+  char* file = NULL;
+  char* full_path = NULL;
+  int r = 0;
 
   path = gimp_file_entry_get_filename(GIMP_FILE_ENTRY(((PresetChangeCallbackData*)user_data)->preset_path));
   file = gtk_combo_box_get_active_text(GTK_COMBO_BOX(widget));
@@ -1386,13 +1382,13 @@ static void
 OnSavePreset(GtkButton* button, gpointer user_data)
 {
   CallbackData* cb_data = ((PresetChangeCallbackData*)user_data)->cb_data;
-  GtkWidget* dialog;
-  GtkFileFilter* filter;
-  char* path;
-  char* file;
-  char* full_path;
-  char* filename;
-  int r;
+  GtkWidget* dialog = NULL;
+  GtkFileFilter* filter = NULL;
+  char* path = NULL;
+  char* file = NULL;
+  char* full_path = NULL;
+  char* filename = NULL;
+  int r = 0;
 
   path = gimp_file_entry_get_filename(GIMP_FILE_ENTRY(((PresetChangeCallbackData*)user_data)->preset_path));
   file = gtk_combo_box_get_active_text(GTK_COMBO_BOX(((PresetChangeCallbackData*)user_data)->preset_combo));
@@ -1470,16 +1466,16 @@ OnSavePreset(GtkButton* button, gpointer user_data)
 static void
 PreviewUpdate(GimpPreview* preview, gpointer user_data)
 {
-  GimpDrawable* drawable;
-  gint bpp;
-  gint rgn_x, rgn_y;
-  guchar* buffer;
-  gint rgn_w;
-  gint rgn_h;
+  GimpDrawable* drawable = NULL;
+  gint bpp = 0;
+  gint rgn_x = 0, rgn_y = 0;
+  guchar* buffer = NULL;
+  gint rgn_w = 0;
+  gint rgn_h = 0;
 
-  GimpPixelRgn srcPR;
-  GimpPixelFetcher* fetcher;
-  gint stride;
+  GimpPixelRgn srcPR = {0};
+  GimpPixelFetcher* fetcher = NULL;
+  gint stride = 0;
   RenderData* rdat = ((CallbackData*)user_data)->rdat;
   PluginState* state = ((CallbackData*)user_data)->state;
 

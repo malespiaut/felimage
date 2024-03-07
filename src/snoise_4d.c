@@ -41,7 +41,7 @@
 SNoiseBasisCache4D*
 InitSNoiseBasis4D()
 {
-  SNoiseBasisCache4D* cache;
+  SNoiseBasisCache4D* cache = NULL;
 
   cache = g_malloc(sizeof(SNoiseBasisCache4D) * (3 * 3 * 3 * 3));
   memset(cache, 0, sizeof(SNoiseBasisCache4D) * (3 * 3 * 3 * 3));
@@ -58,15 +58,15 @@ FinishSNoiseBasis4D(SNoiseBasisCache4D* cache)
 double
 SNoise4D(double a0, double a1, double a2, double a3, SNoiseBasisCache4D* cache)
 {
-  int a[4];
-  guint32 seed[4];
-  int count, j;
-  double d[4];
-  double f[4];
-  gint32 int_at[4];
-  double dist;
-  double r;
-  double fa[4];
+  int a[4] = {0};
+  guint32 seed[4] = {0};
+  int count = 0, j = 0;
+  double d[4] = {NAN};
+  double f[4] = {NAN};
+  gint32 int_at[4] = {0};
+  double dist = NAN;
+  double r = NAN;
+  double fa[4] = {NAN};
 
   int_at[0] = (a0 < 0.0) ? (gint32)a0 - 1 : (gint32)a0;
   int_at[1] = (a1 < 0.0) ? (gint32)a1 - 1 : (gint32)a1;

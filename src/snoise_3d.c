@@ -41,7 +41,7 @@
 SNoiseBasisCache3D*
 InitSNoiseBasis3D()
 {
-  SNoiseBasisCache3D* cache;
+  SNoiseBasisCache3D* cache = NULL;
 
   cache = g_malloc(sizeof(SNoiseBasisCache3D) * (3 * 3 * 3));
   memset(cache, 0, sizeof(SNoiseBasisCache3D) * (3 * 3 * 3));
@@ -58,15 +58,15 @@ FinishSNoiseBasis3D(SNoiseBasisCache3D* cache)
 double
 SNoise3D(double a0, double a1, double a2, SNoiseBasisCache3D* cache)
 {
-  int a[3];
-  guint32 seed[3];
-  int count, j;
-  double d[3];
-  double f[3];
-  gint32 int_at[3];
-  double dist;
-  double r;
-  double fa[3];
+  int a[3] = {0};
+  guint32 seed[3] = {0};
+  int count = 0, j = 0;
+  double d[3] = {NAN};
+  double f[3] = {NAN};
+  gint32 int_at[3] = {0};
+  double dist = NAN;
+  double r = NAN;
+  double fa[3] = {NAN};
 
   int_at[0] = (a0 < 0.0) ? (gint32)a0 - 1 : (gint32)a0;
   int_at[1] = (a1 < 0.0) ? (gint32)a1 - 1 : (gint32)a1;

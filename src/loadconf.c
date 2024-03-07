@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <locale.h>
+#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -34,7 +35,7 @@
 static int
 GetByName(const char* value, int def, const char** names)
 {
-  int i;
+  int i = 0;
 
   i = 0;
   while (*names)
@@ -90,8 +91,8 @@ const char* keywords[] = {
 static void
 SetValue(const char* key, const char* value, PluginState* state)
 {
-  float tmp_f;
-  int v;
+  float tmp_f = NAN;
+  int v = 0;
 
   v = GetByName(key, -1, keywords);
 
@@ -200,7 +201,7 @@ SetValue(const char* key, const char* value, PluginState* state)
 static void
 ParseIncremental(PluginState* state, char* l)
 {
-  char** tokens;
+  char** tokens = NULL;
   g_strchug(l);
 
   if (!l[0] || l[0] == '#')
@@ -228,9 +229,9 @@ PostParse(PluginState* state)
 void
 ParseConfig(PluginState* state, const char* cfg)
 {
-  char** lines;
-  int n;
-  char* loc;
+  char** lines = NULL;
+  int n = 0;
+  char* loc = NULL;
 
   lines = g_strsplit_set(cfg, ",\n", -1);
 
@@ -254,8 +255,8 @@ int
 LoadConfig(const char* filename, PluginState* state)
 {
   FILE* file;
-  char* buffer;
-  char* loc;
+  char* buffer = NULL;
+  char* loc = NULL;
 
   file = fopen(filename, "rt");
   if (!file)

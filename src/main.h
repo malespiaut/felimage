@@ -129,15 +129,15 @@ typedef struct
   guint seed;
   gboolean random_seed;
 
-  gfloat size_x; /* size in pixels */
-  gfloat size_y;
+  float size_x; /* size in pixels */
+  float size_y;
 
-  gfloat octaves;    /* default = 3 */
-  gfloat lacunarity; /* default = 2 */
-  gfloat hurst;      /* default = 0.5 */
+  float octaves;    /* default = 3 */
+  float lacunarity; /* default = 2 */
+  float hurst;      /* default = 0.5 */
 
-  gfloat frequency; /* default = 1 */
-  gfloat shift;     /* default = 0 (percentage) */
+  float frequency; /* default = 1 */
+  float shift;     /* default = 0 (percentage) */
 
   gint8 mapping;      /* default = 0 (planar) */
   gint8 basis;        /* default = 0 (noise) */
@@ -149,8 +149,8 @@ typedef struct
 
   gint8 channel[4];
 
-  gfloat warp_x_size;
-  gfloat warp_y_size;
+  float warp_x_size;
+  float warp_y_size;
 
   gfloat warp_caustics; /* default = 0 (percentage) */
 

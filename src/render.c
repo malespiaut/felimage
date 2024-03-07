@@ -25,6 +25,7 @@
 #include <gtk/gtk.h>
 
 #include <libgimp/gimp.h>
+#include <math.h>
 
 #include "main.h"
 
@@ -49,8 +50,8 @@
 GimpPixelFetcher*
 GetPixelFetcher(PluginState* state, GimpDrawable* drawable)
 {
-  GimpPixelFetcher* fetcher;
-  GimpRGB bg_color;
+  GimpPixelFetcher* fetcher = NULL;
+  GimpRGB bg_color = {0};
 
   fetcher = gimp_pixel_fetcher_new(drawable, FALSE);
 
@@ -70,17 +71,17 @@ static int FillRegionPlane(RenderData* rdat, float value);
 static void
 PrecalcRenderStuff(RenderData* rdat)
 {
-  PluginState* state;
-  guint dirty;
-  int failed;
-  double gain, pinch, bias;
-  GimpRGB col_fg_bg, col_bg;
-  char* grad_name;
-  double tmp, tmp2;
-  int tot_samples;
-  int i, j;
-  gdouble* fp_gradient;
-  double s;
+  PluginState* state = NULL;
+  guint dirty = 0;
+  int failed = 0;
+  double gain = NAN, pinch = NAN, bias = NAN;
+  GimpRGB col_fg_bg = {0}, col_bg = {0};
+  char* grad_name = NULL;
+  double tmp = NAN, tmp2 = NAN;
+  int tot_samples = 0;
+  int i = 0, j = 0;
+  gdouble* fp_gradient = NULL;
+  double s = NAN;
 
   dirty = rdat->dirty;
 
@@ -369,7 +370,7 @@ SetRenderBufferMode(RenderData* rdat, int mode, int pixel_stride)
 void
 SetRenderBufferForDrawable(RenderData* rdat, GimpDrawable* drawable)
 {
-  int x1, y1, x2, y2;
+  int x1 = 0, y1 = 0, x2 = 0, y2 = 0;
 
   gimp_drawable_mask_bounds(drawable->drawable_id, &x1, &y1, &x2, &y2);
 
@@ -429,15 +430,15 @@ Render(gint32 image_ID,
        PluginState* state)
 {
 
-  GimpPixelRgn dst_rgn;
-  GimpPixelRgn src_rgn;
+  GimpPixelRgn dst_rgn = {0};
+  GimpPixelRgn src_rgn = {0};
 
-  gint progress, max_progress;
-  gint has_alpha, alpha;
-  gint x1, y1, x2, y2;
-  gpointer pr;
-  GimpPixelFetcher* fetcher;
-  RenderData rdat;
+  gint progress = 0, max_progress = 0;
+  gint has_alpha = 0, alpha = 0;
+  gint x1 = 0, y1 = 0, x2 = 0, y2 = 0;
+  gpointer pr = NULL;
+  GimpPixelFetcher* fetcher = NULL;
+  RenderData rdat = {0};
 
   gimp_drawable_mask_bounds(drawable->drawable_id, &x1, &y1, &x2, &y2);
   has_alpha = gimp_drawable_has_alpha(drawable->drawable_id);
@@ -523,10 +524,10 @@ Render(gint32 image_ID,
 int
 RenderChannels(RenderData* rdat)
 {
-  int cnum, rev;
-  int chan;
-  int alpha_channel;
-  PluginState* state;
+  int cnum = 0, rev = 0;
+  int chan = 0;
+  int alpha_channel = 0;
+  PluginState* state = NULL;
 
   state = rdat->p_state;
 
@@ -569,7 +570,7 @@ RenderChannels(RenderData* rdat)
 int
 RenderWarp(RenderData* rdat, int overscan)
 {
-  int cnum;
+  int cnum = 0;
 
   rdat->region_width += overscan;
   rdat->region_height += overscan;
@@ -594,9 +595,9 @@ RenderWarp(RenderData* rdat, int overscan)
 static int
 FillRegionPlane(RenderData* rdat, float value)
 {
-  float* p;
-  int stride;
-  int i;
+  float* p = NULL;
+  int stride = 0;
+  int i = 0;
 
   stride = rdat->pixel_stride;
   p = rdat->buffer;
@@ -615,39 +616,39 @@ int
 RenderLow(RenderData* rdat, int plane)
 {
 
-  PluginState* state;
-  basis_fn_type* basis_fn;
-  float* p;
-  gint x, y;
-  double value;
-  int write_mode;
+  PluginState* state = NULL;
+  basis_fn_type* basis_fn = NULL;
+  float* p = NULL;
+  gint x = 0, y = 0;
+  double value = NAN;
+  int write_mode = 0;
 
-  double rad1, rad2;
-  double ang1, ang2;
-  double dang1, dang2;
+  double rad1 = NAN, rad2 = NAN;
+  double ang1 = NAN, ang2 = NAN;
+  double dang1 = NAN, dang2 = NAN;
 
-  double alpha, beta;
+  double alpha = NAN, beta = NAN;
 
-  double* gradient;
-  double bias_coef[3];
-  double pinch_coef[5];
-  int i;
-  int polar;
-  int vp;
+  double* gradient = NULL;
+  double bias_coef[3] = {NAN};
+  double pinch_coef[5] = {NAN};
+  int i = 0;
+  int polar = 0;
+  int vp = 0;
 
-  double x_orig;
-  int function_mode;
-  int mapping_mode;
-  double px, py;
-  double dx, dy;
-  double frequency;
-  int height, width;
-  double c1, s1, c2, s2;
-  double phase;
-  double gain;
-  int pixel_stride;
-  double shift;
-  double plane1, plane2;
+  double x_orig = NAN;
+  int function_mode = 0;
+  int mapping_mode = 0;
+  double px = NAN, py = NAN;
+  double dx = NAN, dy = NAN;
+  double frequency = NAN;
+  int height = 0, width = 0;
+  double c1 = NAN, s1 = NAN, c2 = NAN, s2 = NAN;
+  double phase = NAN;
+  double gain = NAN;
+  int pixel_stride = 0;
+  double shift = NAN;
+  double plane1 = NAN, plane2 = NAN;
 
   if (rdat->dirty)
   {
@@ -843,11 +844,11 @@ RenderLow(RenderData* rdat, int plane)
 void
 Blend(RenderData* rdat, guchar* bg, guchar* dest, int row_stride, int bytes_pp)
 {
-  int x, y;
-  int width, height;
-  float* fg;
-  float gamma, bg_alpha, fg_alpha;
-  float fg_comp[3], bg_comp[3];
+  int x = 0, y = 0;
+  int width = 0, height = 0;
+  float* fg = NULL;
+  float gamma = NAN, bg_alpha = NAN, fg_alpha = NAN;
+  float fg_comp[3] = {NAN}, bg_comp[3] = {NAN};
 
   fg = rdat->buffer;
   width = rdat->region_width;
@@ -965,36 +966,36 @@ Blend(RenderData* rdat, guchar* bg, guchar* dest, int row_stride, int bytes_pp)
 void
 Warp(RenderData* rdat, GimpPixelFetcher* fetcher, guchar* dest, int row_stride, int bytes_pp, int overscan)
 {
-  int x, y;
-  int width, height;
-  int src_x, src_y;
-  int px, py;
-  double fpx, fpy;
-  double dx, dy;
-  float* fg;
-  int shift;
-  int row1, row2;
-  double dx1, dy1, dx2, dy2;
-  double scale_x;
-  double scale_y;
-  double area;
-  double area_inv;
+  int x = 0, y = 0;
+  int width = 0, height = 0;
+  int src_x = 0, src_y = 0;
+  int px = 0, py = 0;
+  double fpx = NAN, fpy = NAN;
+  double dx = NAN, dy = NAN;
+  float* fg = NULL;
+  int shift = 0;
+  int row1 = 0, row2 = 0;
+  double dx1 = NAN, dy1 = NAN, dx2 = NAN, dy2 = NAN;
+  double scale_x = NAN;
+  double scale_y = NAN;
+  double area = NAN;
+  double area_inv = NAN;
   double v[4];
   double sum[4];
-  double average;
-  int x_samples, y_samples;
-  double caustics_x, caustics_y;
-  double f1, f2;
-  int sampling;
-  int col_channels;
-  int alpha_channel;
-  double tmp1, tmp2;
-  int i;
+  double average = NAN;
+  int x_samples = 0, y_samples = 0;
+  double caustics_x = NAN, caustics_y = NAN;
+  double f1 = NAN, f2 = NAN;
+  int sampling = 0;
+  int col_channels = 0;
+  int alpha_channel = 0;
+  double tmp1 = NAN, tmp2 = NAN;
+  int i = 0;
 
   PluginState* state = rdat->p_state;
 
-  guchar pixel[4];
-  int ix, iy;
+  guchar pixel[4] = {0};
+  int ix = 0, iy = 0;
 
   width = rdat->region_width;
   height = rdat->region_height;

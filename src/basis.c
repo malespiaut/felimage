@@ -28,6 +28,7 @@
 #include <stdio.h>
 #else
 #include <libgimp/gimp.h>
+#include <math.h>
 #endif
 
 #include "main.h"
@@ -42,11 +43,11 @@
 
 #include "render.h"
 
-static int octaves;
-static double lacunarity;
-static double oct_frac;
+static int octaves = 0;
+static double lacunarity = NAN;
+static double oct_frac = NAN;
 static double* weight = NULL;
-static double exponent;
+static double exponent = NAN;
 
 typedef void* init_fn_type();
 typedef void deinit_fn_type(void*);
@@ -88,9 +89,9 @@ double st_sum, st_min, st_max;
 #define BASE3D(NAME, XTRA_VARS, VALUE_CALC, RETURN) \
   static double NAME(double x, double y, double z)  \
   {                                                 \
-    int i;                                          \
-    double value;                                   \
-    double shift;                                   \
+    int i = 0;                                      \
+    double value = NAN;                             \
+    double shift = NAN;                             \
     XTRA_VARS                                       \
                                                     \
     shift = 0;                                      \
@@ -108,9 +109,9 @@ double st_sum, st_min, st_max;
 #define BASE4D(NAME, XTRA_VARS, VALUE_CALC, RETURN)          \
   static double NAME(double x, double y, double z, double t) \
   {                                                          \
-    int i;                                                   \
-    double value;                                            \
-    double shift;                                            \
+    int i = 0;                                               \
+    double value = NAN;                                      \
+    double shift = NAN;                                      \
     XTRA_VARS                                                \
                                                              \
     shift = 0;                                               \
@@ -129,9 +130,9 @@ double st_sum, st_min, st_max;
 #define BASE5D(NAME, XTRA_VARS, VALUE_CALC, RETURN)                    \
   static double NAME(double x, double y, double z, double s, double t) \
   {                                                                    \
-    int i;                                                             \
-    double value;                                                      \
-    double shift;                                                      \
+    int i = 0;                                                         \
+    double value = NAN;                                                \
+    double shift = NAN;                                                \
     XTRA_VARS                                                          \
                                                                        \
     shift = 0;                                                         \
@@ -163,7 +164,7 @@ double st_sum, st_min, st_max;
 
 #define TURB3D(NAME, XTRA_VARS, VALUE_CALC, CALC_FBM, CALC_MF1, CALC_MF2, MID_VALUE, SCALING) \
   BASE3D(NAME##_FBM, /* name */                                                               \
-         double tmp; /* extra vars */                                                         \
+         double tmp = NAN; /* extra vars */                                                   \
          XTRA_VARS;                                                                           \
          value = 0;                                                                           \
          ,                                                                                    \
@@ -175,7 +176,7 @@ double st_sum, st_min, st_max;
          value * (SCALING * 2.0) - 0.5 /* final scaling */                                    \
   )                                                                                           \
   BASE3D(NAME##_MF1,                                                                          \
-         double tmp;                                                                          \
+         double tmp = NAN;                                                                    \
          XTRA_VARS;                                                                           \
          value = 1;                                                                           \
          ,                                                                                    \
@@ -186,7 +187,7 @@ double st_sum, st_min, st_max;
          ,                                                                                    \
          pow(value, exponent) - 0.5)                                                          \
   BASE3D(NAME##_MF2,                                                                          \
-         double tmp;                                                                          \
+         double tmp = NAN;                                                                    \
          XTRA_VARS;                                                                           \
          value = 1;                                                                           \
          ,                                                                                    \
@@ -204,7 +205,7 @@ double st_sum, st_min, st_max;
 
 #define TURB4D(NAME, XTRA_VARS, VALUE_CALC, CALC_FBM, CALC_MF1, CALC_MF2, MID_VALUE, SCALING) \
   BASE4D(NAME##_FBM, /* name */                                                               \
-         double tmp; /* extra vars */                                                         \
+         double tmp = NAN; /* extra vars */                                                   \
          XTRA_VARS;                                                                           \
          value = 0;                                                                           \
          ,                                                                                    \
@@ -216,7 +217,7 @@ double st_sum, st_min, st_max;
          value * (SCALING * 2.0) - 0.5 /* final scaling */                                    \
   )                                                                                           \
   BASE4D(NAME##_MF1,                                                                          \
-         double tmp;                                                                          \
+         double tmp = NAN;                                                                    \
          XTRA_VARS;                                                                           \
          value = 1;                                                                           \
          ,                                                                                    \
@@ -227,7 +228,7 @@ double st_sum, st_min, st_max;
          ,                                                                                    \
          pow(value, exponent) - 0.5)                                                          \
   BASE4D(NAME##_MF2,                                                                          \
-         double tmp;                                                                          \
+         double tmp = NAN;                                                                    \
          XTRA_VARS;                                                                           \
          value = 1;                                                                           \
          ,                                                                                    \
@@ -245,7 +246,7 @@ double st_sum, st_min, st_max;
 
 #define TURB5D(NAME, XTRA_VARS, VALUE_CALC, CALC_FBM, CALC_MF1, CALC_MF2, MID_VALUE, SCALING) \
   BASE5D(NAME##_FBM, /* name */                                                               \
-         double tmp; /* extra vars */                                                         \
+         double tmp = NAN; /* extra vars */                                                   \
          XTRA_VARS;                                                                           \
          value = 0;                                                                           \
          ,                                                                                    \
@@ -257,7 +258,7 @@ double st_sum, st_min, st_max;
          value * (SCALING * 2.0) - 0.5 /* final scaling */                                    \
   )                                                                                           \
   BASE5D(NAME##_MF1,                                                                          \
-         double tmp;                                                                          \
+         double tmp = NAN;                                                                    \
          XTRA_VARS;                                                                           \
          value = 1;                                                                           \
          ,                                                                                    \
@@ -268,7 +269,7 @@ double st_sum, st_min, st_max;
          ,                                                                                    \
          pow(value, exponent) - 0.5)                                                          \
   BASE5D(NAME##_MF2,                                                                          \
-         double tmp;                                                                          \
+         double tmp = NAN;                                                                    \
          XTRA_VARS;                                                                           \
          value = 1;                                                                           \
          ,                                                                                    \
@@ -370,9 +371,9 @@ TURB5D(LatticeTurb5D_1, /* no extra vars */, tmp = LNoise5D(PARAM_5D, (guint16*)
 /****** CELL 1 (Skin) *******/
 
 FUNC3D(Cell3D_1,
-       double f[3];
-       double delta[3][3];
-       int id[3];
+       double f[3] = {NAN};
+       double delta[3][3] = {NAN};
+       int id[3] = {0};
        ,                                                            /* extra vars */
        Cells3D(PARAM_3D, 2, f, delta, id, (CellBasisCache3D*)data), /* common calculation */
        value += (f[1] - f[0]) * weight[i],
@@ -383,9 +384,9 @@ FUNC3D(Cell3D_1,
 
 /**/
 FUNC4D(Cell4D_1,
-       double f[3];
-       double delta[3][4];
-       int id[3];
+       double f[3] = {NAN};
+       double delta[3][4] = {NAN};
+       int id[3] = {0};
        ,                                                            /* extra vars */
        Cells4D(PARAM_4D, 2, f, delta, id, (CellBasisCache4D*)data), /* common calculation */
        value += (f[1] - f[0]) * weight[i],
@@ -396,9 +397,9 @@ FUNC4D(Cell4D_1,
 
 /**/
 FUNC5D(Cell5D_1,
-       double f[3];
-       double delta[3][5];
-       int id[3];
+       double f[3] = {NAN};
+       double delta[3][5] = {NAN};
+       int id[3] = {0};
        ,                                                            /* extra vars */
        Cells5D(PARAM_5D, 2, f, delta, id, (CellBasisCache5D*)data), /* common calculation */
        value += (f[1] - f[0]) * weight[i],
@@ -411,9 +412,9 @@ FUNC5D(Cell5D_1,
 
 /**/
 FUNC3D(Cell3D_2,
-       double f[3];
-       double delta[3][3];
-       int id[3];
+       double f[3] = {NAN};
+       double delta[3][3] = {NAN};
+       int id[3] = {0};
        ,                                                            /* extra vars */
        Cells3D(PARAM_3D, 2, f, delta, id, (CellBasisCache3D*)data), /* common calculation */
        value += f[0] * weight[i],
@@ -424,9 +425,9 @@ FUNC3D(Cell3D_2,
 
 /**/
 FUNC4D(Cell4D_2,
-       double f[3];
-       double delta[3][4];
-       int id[3];
+       double f[3] = {NAN};
+       double delta[3][4] = {NAN};
+       int id[3] = {0};
        ,                                                            /* extra vars */
        Cells4D(PARAM_4D, 2, f, delta, id, (CellBasisCache4D*)data), /* common calculation */
        value += f[0] * weight[i],
@@ -437,9 +438,9 @@ FUNC4D(Cell4D_2,
 
 /**/
 FUNC5D(Cell5D_2,
-       double f[3];
-       double delta[3][5];
-       int id[3];
+       double f[3] = {NAN};
+       double delta[3][5] = {NAN};
+       int id[3] = {0};
        ,                                                            /* extra vars */
        Cells5D(PARAM_5D, 2, f, delta, id, (CellBasisCache5D*)data), /* common calculation */
        value += f[0] * weight[i],
@@ -452,9 +453,9 @@ FUNC5D(Cell5D_2,
 
 /**/
 FUNC3D(Cell3D_3,
-       double f[3];
-       double delta[3][3];
-       int id[3];
+       double f[3] = {NAN};
+       double delta[3][3] = {NAN};
+       int id[3] = {0};
        ,                                                            /* extra vars */
        Cells3D(PARAM_3D, 2, f, delta, id, (CellBasisCache3D*)data), /* common calculation */
        value += f[1] * weight[i],
@@ -465,9 +466,9 @@ FUNC3D(Cell3D_3,
 
 /**/
 FUNC4D(Cell4D_3,
-       double f[3];
-       double delta[3][4];
-       int id[3];
+       double f[3] = {NAN};
+       double delta[3][4] = {NAN};
+       int id[3] = {0};
        ,                                                            /* extra vars */
        Cells4D(PARAM_4D, 2, f, delta, id, (CellBasisCache4D*)data), /* common calculation */
        value += f[1] * weight[i],
@@ -478,9 +479,9 @@ FUNC4D(Cell4D_3,
 
 /**/
 FUNC5D(Cell5D_3,
-       double f[3];
-       double delta[3][5];
-       int id[3];
+       double f[3] = {NAN};
+       double delta[3][5] = {NAN};
+       int id[3] = {0};
        ,                                                            /* extra vars */
        Cells5D(PARAM_5D, 2, f, delta, id, (CellBasisCache5D*)data), /* common calculation */
        value += f[1] * weight[i],
@@ -493,9 +494,9 @@ FUNC5D(Cell5D_3,
 
 /**/
 FUNC3D(Cell3D_4,
-       double f[3];
-       double delta[3][3];
-       int id[3];
+       double f[3] = {NAN};
+       double delta[3][3] = {NAN};
+       int id[3] = {0};
        ,                                                            /* extra vars */
        Cells3D(PARAM_3D, 2, f, delta, id, (CellBasisCache3D*)data), /* common calculation */
        value += (Hash1(id[0]) * (1.0 / (TABLE_SIZE - 1))) * weight[i],
@@ -506,9 +507,9 @@ FUNC3D(Cell3D_4,
 
 /**/
 FUNC4D(Cell4D_4,
-       double f[3];
-       double delta[3][4];
-       int id[3];
+       double f[3] = {NAN};
+       double delta[3][4] = {NAN};
+       int id[3] = {0};
        ,                                                            /* extra vars */
        Cells4D(PARAM_4D, 2, f, delta, id, (CellBasisCache4D*)data), /* common calculation */
        value += (Hash1(id[0]) * (1.0 / (TABLE_SIZE - 1))) * weight[i],
@@ -519,9 +520,9 @@ FUNC4D(Cell4D_4,
 
 /**/
 FUNC5D(Cell5D_4,
-       double f[3];
-       double delta[3][5];
-       int id[3];
+       double f[3] = {NAN};
+       double delta[3][5] = {NAN};
+       int id[3] = {0};
        ,                                                            /* extra vars */
        Cells5D(PARAM_5D, 2, f, delta, id, (CellBasisCache5D*)data), /* common calculation */
        value += (Hash1(id[0]) * (1.0 / (TABLE_SIZE - 1))) * weight[i],
@@ -534,11 +535,11 @@ FUNC5D(Cell5D_4,
 
 /**/
 FUNC3D(Cell3D_5,
-       double f[3];
-       double delta[3][3];
-       int id[3];
-       double v[3];
-       double n;
+       double f[3] = {NAN};
+       double delta[3][3] = {NAN};
+       int id[3] = {0};
+       double v[3] = {NAN};
+       double n = NAN;
        , /* extra vars */
        Cells3D(PARAM_3D, 1, f, delta, id, (CellBasisCache3D*)data);
        v[0] = (Hash1(id[0]) - ((TABLE_SIZE - 1) * 0.5));
@@ -557,11 +558,11 @@ FUNC3D(Cell3D_5,
 
 /**/
 FUNC4D(Cell4D_5,
-       double f[3];
-       double delta[3][4];
-       int id[3];
-       double v[4];
-       double n;
+       double f[3] = {NAN};
+       double delta[3][4] = {NAN};
+       int id[3] = {0};
+       double v[4] = {NAN};
+       double n = NAN;
        , /* extra vars */
        Cells4D(PARAM_4D, 1, f, delta, id, (CellBasisCache4D*)data);
        v[0] = (Hash1(id[0]) - ((TABLE_SIZE - 1) * 0.5));
@@ -581,11 +582,11 @@ FUNC4D(Cell4D_5,
 
 /**/
 FUNC5D(Cell5D_5,
-       double f[3];
-       double delta[3][5];
-       int id[3];
-       double v[5];
-       double n;
+       double f[3] = {NAN};
+       double delta[3][5] = {NAN};
+       int id[3] = {0};
+       double v[5] = {NAN};
+       double n = NAN;
        , /* extra vars */
        Cells5D(PARAM_5D, 1, f, delta, id, (CellBasisCache5D*)data);
        v[0] = (Hash1(id[0]) - ((TABLE_SIZE - 1) * 0.5));
@@ -734,11 +735,11 @@ static basis_struct basis[] =
 static void
 SwitchBasis(int basis_fn, int dim, int multi, float p_octaves, float p_lacunarity, float p_hurst)
 {
-  int new_data_type;
-  double freq;
-  double alpha;
-  int i;
-  static double scaling;
+  int new_data_type = 0;
+  double freq = NAN;
+  double alpha = NAN;
+  int i = 0;
+  static double scaling = NAN;
 
   new_data_type = basis_fn * 9 + (dim - 3) + multi * 3;
 
@@ -803,8 +804,8 @@ SwitchBasis(int basis_fn, int dim, int multi, float p_octaves, float p_lacunarit
 void
 InitBasis(RenderData* rdat)
 {
-  PluginState* state;
-  int dim;
+  PluginState* state = NULL;
+  int dim = 0;
 
   state = rdat->p_state;
 
@@ -858,11 +859,11 @@ GetBasis()
 int
 main(int argc, char* argv[])
 {
-  int i, j;
-  int dim;
-  basis_fn_type* fn;
-  double f1, f2, f3, f4, f5;
-  double mid, fac;
+  int i = 0, j = 0;
+  int dim = 0;
+  basis_fn_type* fn = NULL;
+  double f1 = NAN, f2 = NAN, f3 = NAN, f4 = NAN, f5 = NAN;
+  double mid = NAN, fac = NAN;
 
   InitShuffleTable(23470);
 

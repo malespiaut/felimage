@@ -65,7 +65,7 @@ static void AddSamples_5D(gint32 xi, gint32 yi, gint32 zi, gint32 si, gint32 ti,
 CellBasisCache5D*
 InitCellBasis5D()
 {
-  CellBasisCache5D* cache;
+  CellBasisCache5D* cache = NULL;
 
   cache = calloc(1, sizeof(CellBasisCache5D) * (3 * 3 * 3 * 3 * 3));
 
@@ -81,15 +81,15 @@ FinishCellBasis5D(CellBasisCache5D* cache)
 void
 Cells5D(double a0, double a1, double a2, double a3, double a4, gint32 max_order, double* f, double (*p_delta)[5], guint32* p_id, CellBasisCache5D* cache)
 {
-  double pa0, pa1, pa2, pa3, pa4, ma0, ma1, ma2, ma3, ma4;
-  double new_at[5];
-  gint32 i, j;
-  gint32 int_at[5];
-  gint32 int_at_p[5];
-  gint32 int_at_m[5];
-  double* f_max;
-  double delta[4][5];
-  guint32 id[4];
+  double pa0 = NAN, pa1 = NAN, pa2 = NAN, pa3 = NAN, pa4 = NAN, ma0 = NAN, ma1 = NAN, ma2 = NAN, ma3 = NAN, ma4 = NAN;
+  double new_at[5] = {NAN};
+  gint32 i = 0, j = 0;
+  gint32 int_at[5] = {0};
+  gint32 int_at_p[5] = {0};
+  gint32 int_at_m[5] = {0};
+  double* f_max = NULL;
+  double delta[4][5] = {NAN};
+  guint32 id[4] = {0};
 
   int order[] = {0, 1, 2, 3, 4};
 
@@ -646,10 +646,10 @@ static void
 AddSamples_5D(gint32 xi, gint32 yi, gint32 zi, gint32 si, gint32 ti, gint32 max_order, double at[5], double* F, double (*delta)[5], guint32* ID, int order[], CellBasisCache5D* cache)
 {
 
-  double dx, dy, dz, ds, dt, fx, fy, fz, fs, ft, d2;
-  gint32 count, i, j, index;
-  int slot;
-  guint32 seed, this_id;
+  double dx = NAN, dy = NAN, dz = NAN, ds = NAN, dt = NAN, fx = NAN, fy = NAN, fz = NAN, fs = NAN, ft = NAN, d2 = NAN;
+  gint32 count = 0, i = 0, j = 0, index = 0;
+  int slot = 0;
+  guint32 seed = 0, this_id = 0;
 
   seed = Hash5(xi, yi, zi, si, ti);
   count = Poisson_count[seed & 255];

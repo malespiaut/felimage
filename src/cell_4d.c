@@ -65,7 +65,7 @@ static void AddSamples_4D(gint32 xi, gint32 yi, gint32 zi, gint32 si, gint32 max
 CellBasisCache4D*
 InitCellBasis4D()
 {
-  CellBasisCache4D* cache;
+  CellBasisCache4D* cache = NULL;
 
   cache = calloc(1, sizeof(CellBasisCache4D) * (3 * 3 * 3 * 3));
 
@@ -81,15 +81,15 @@ FinishCellBasis4D(CellBasisCache4D* cache)
 void
 Cells4D(double a0, double a1, double a2, double a3, gint32 max_order, double* f, double (*p_delta)[4], guint32* p_id, CellBasisCache4D* cache)
 {
-  double pa0, pa1, pa2, pa3, ma0, ma1, ma2, ma3;
-  double new_at[4];
-  gint32 i, j;
-  gint32 int_at[4];
-  gint32 int_at_p[4];
-  gint32 int_at_m[4];
-  double* f_max;
-  double delta[4][4];
-  guint32 id[4];
+  double pa0 = NAN, pa1 = NAN, pa2 = NAN, pa3 = NAN, ma0 = NAN, ma1 = NAN, ma2 = NAN, ma3 = NAN;
+  double new_at[4] = {NAN};
+  gint32 i = 0, j = 0;
+  gint32 int_at[4] = {0};
+  gint32 int_at_p[4] = {0};
+  gint32 int_at_m[4] = {0};
+  double* f_max = NULL;
+  double delta[4][4] = {NAN};
+  guint32 id[4] = {0};
 
   int order[] = {0, 1, 2, 3, 4};
 
@@ -313,10 +313,10 @@ static void
 AddSamples_4D(gint32 xi, gint32 yi, gint32 zi, gint32 si, gint32 max_order, double at[4], double* F, double (*delta)[4], guint32* ID, int order[], CellBasisCache4D* cache)
 {
 
-  double dx, dy, dz, ds, fx, fy, fz, fs, d2;
-  gint32 count, i, j, index;
-  int slot;
-  guint32 seed, this_id;
+  double dx = NAN, dy = NAN, dz = NAN, ds = NAN, fx = NAN, fy = NAN, fz = NAN, fs = NAN, d2 = NAN;
+  gint32 count = 0, i = 0, j = 0, index = 0;
+  int slot = 0;
+  guint32 seed = 0, this_id = 0;
 
   seed = Hash4(xi, yi, zi, si);
   count = Poisson_count[seed & 255];

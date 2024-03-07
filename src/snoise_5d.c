@@ -41,7 +41,7 @@
 SNoiseBasisCache5D*
 InitSNoiseBasis5D()
 {
-  SNoiseBasisCache5D* cache;
+  SNoiseBasisCache5D* cache = NULL;
 
   cache = g_malloc(sizeof(SNoiseBasisCache5D) * (3 * 3 * 3 * 3 * 3));
   memset(cache, 0, sizeof(SNoiseBasisCache5D) * (3 * 3 * 3 * 3 * 3));
@@ -58,15 +58,15 @@ FinishSNoiseBasis5D(SNoiseBasisCache5D* cache)
 double
 SNoise5D(double a0, double a1, double a2, double a3, double a4, SNoiseBasisCache5D* cache)
 {
-  int a[5];
-  guint32 seed[5];
-  int count, j;
-  double d[5];
-  double f[5];
+  int a[5] = {0};
+  guint32 seed[5] = {0};
+  int count = 0, j = 0;
+  double d[5] = {NAN};
+  double f[5] = {NAN};
   gint32 int_at[5];
-  double dist;
-  double r;
-  double fa[5];
+  double dist = NAN;
+  double r = NAN;
+  double fa[5] = {NAN};
 
   int_at[0] = (a0 < 0.0) ? (gint32)a0 - 1 : (gint32)a0;
   int_at[1] = (a1 < 0.0) ? (gint32)a1 - 1 : (gint32)a1;

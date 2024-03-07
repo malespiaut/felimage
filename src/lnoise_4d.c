@@ -26,6 +26,7 @@
 #include <string.h>
 #else
 #include <libgimp/gimp.h>
+#include <math.h>
 #endif
 
 #include "lnoise_int.h"
@@ -34,16 +35,16 @@
 double
 LNoise4D(double x, double y, double z, double t, guint16* shuffle_table)
 {
-  double xif, yif, zif, tif;
-  int xi, yi, zi, ti;
-  double xf, yf, zf, tf;
-  double cyf, cxf, czf, ctf;
-  double dp[16];
-  double v1, v2, v3, v4, v5, v6, v7, v8;
-  double vx, vy, vz, vt;
-  int i;
-  int x_idx, y_idx, z_idx, t_idx;
-  double tmp;
+  double xif = NAN, yif = NAN, zif = NAN, tif = NAN;
+  int xi = 0, yi = 0, zi = 0, ti = 0;
+  double xf = NAN, yf = NAN, zf = NAN, tf = NAN;
+  double cyf = NAN, cxf = NAN, czf = NAN, ctf = NAN;
+  double dp[16] = {NAN};
+  double v1 = NAN, v2 = NAN, v3 = NAN, v4 = NAN, v5 = NAN, v6 = NAN, v7 = NAN, v8 = NAN;
+  double vx = NAN, vy = NAN, vz = NAN, vt = NAN;
+  int i = 0;
+  int x_idx = 0, y_idx = 0, z_idx = 0, t_idx = 0;
+  double tmp = NAN;
 
   /* Get the integer and fractional part of the coordinates */
   xif = floor(x);

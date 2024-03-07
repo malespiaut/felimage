@@ -15,7 +15,7 @@
 
 #define RANDOM_FACTOR 1791398085
 
-static guint32 rand_x, rand_c, rand_ah, rand_al;
+static guint32 rand_x = 0, rand_c = 0, rand_ah = 0, rand_al = 0;
 
 guint16* global_shuffle_table = NULL;
 
@@ -43,9 +43,9 @@ SetRandomSeed(guint32 seed)
 void
 InitShuffleTable(guint32 seed)
 {
-  guint32 i, j, t;
-  int fi, bj, fj;
-  guint16* back_shuffle_table;
+  guint32 i = 0, j = 0, t = 0;
+  int fi = 0, bj = 0, fj = 0;
+  guint16* back_shuffle_table = NULL;
 
   SetRandomSeed(seed);
 

@@ -65,7 +65,7 @@ static void AddSamples_3D(gint32 xi, gint32 yi, gint32 zi, gint32 max_order, dou
 CellBasisCache3D*
 InitCellBasis3D()
 {
-  CellBasisCache3D* cache;
+  CellBasisCache3D* cache = NULL;
 
   cache = calloc(1, sizeof(CellBasisCache3D) * (3 * 3 * 3));
 
@@ -81,15 +81,15 @@ FinishCellBasis3D(CellBasisCache3D* cache)
 void
 Cells3D(double a0, double a1, double a2, gint32 max_order, double* f, double (*p_delta)[3], guint32* p_id, CellBasisCache3D* cache)
 {
-  double pa0, pa1, pa2, ma0, ma1, ma2;
-  double new_at[3];
-  gint32 i, j;
-  gint32 int_at[3];
-  gint32 int_at_p[3];
-  gint32 int_at_m[3];
-  double* f_max;
-  double delta[4][3];
-  guint32 id[4];
+  double pa0 = NAN, pa1 = NAN, pa2 = NAN, ma0 = NAN, ma1 = NAN, ma2 = NAN;
+  double new_at[3] = {NAN};
+  gint32 i = 0, j = 0;
+  gint32 int_at[3] = {0};
+  gint32 int_at_p[3] = {0};
+  gint32 int_at_m[3] = {0};
+  double* f_max = NULL;
+  double delta[4][3] = {NAN};
+  guint32 id[4] = {0};
 
   int order[] = {0, 1, 2, 3, 4};
 
@@ -198,10 +198,10 @@ static void
 AddSamples_3D(gint32 xi, gint32 yi, gint32 zi, gint32 max_order, double at[3], double* F, double (*delta)[3], guint32* ID, int order[], CellBasisCache3D* cache)
 {
 
-  double dx, dy, dz, fx, fy, fz, d2;
-  gint32 count, i, j, index;
-  int slot;
-  guint32 seed, this_id;
+  double dx = NAN, dy = NAN, dz = NAN, fx = NAN, fy = NAN, fz = NAN, d2 = NAN;
+  gint32 count = 0, i = 0, j = 0, index = 0;
+  int slot = 0;
+  guint32 seed = 0, this_id = 0;
 
   seed = Hash3(xi, yi, zi);
   count = Poisson_count[seed & 255];
