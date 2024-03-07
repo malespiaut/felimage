@@ -104,9 +104,10 @@ PrecalcRenderStuff(RenderData* rdat)
     if (rdat->buf_alloc < tot_samples)
     {
       /*g_message("Reallocating buffer to %i bytes",tot_samples);*/
-      if (rdat->buf_alloc) {
+      if (rdat->buf_alloc)
+      {
         g_free(rdat->buffer);
-}
+      }
       rdat->buffer = g_malloc(tot_samples);
       rdat->buf_alloc = tot_samples;
     }
@@ -158,26 +159,32 @@ PrecalcRenderStuff(RenderData* rdat)
     pinch = state->pinch;
     bias = state->bias;
 
-    if (gain > 1) {
+    if (gain > 1)
+    {
       gain = 1;
-}
-    if (gain < -1) {
+    }
+    if (gain < -1)
+    {
       gain = -1;
-}
+    }
 
-    if (bias > 1) {
+    if (bias > 1)
+    {
       bias = 1;
-}
-    if (bias < -1) {
+    }
+    if (bias < -1)
+    {
       bias = -1;
-}
+    }
 
-    if (pinch > 1) {
+    if (pinch > 1)
+    {
       pinch = 1;
-}
-    if (pinch < -1) {
+    }
+    if (pinch < -1)
+    {
       pinch = -1;
-}
+    }
 
     gain = pow(6, gain);
     bias = (bias * 0.499) + 0.5;
@@ -219,12 +226,14 @@ PrecalcRenderStuff(RenderData* rdat)
   {
 
     tmp = (state->warp_caustics + 100) / 200; /* the range is -100 .. 100 */
-    if (tmp > 1) {
+    if (tmp > 1)
+    {
       tmp = 1;
-}
-    if (tmp < 0) {
+    }
+    if (tmp < 0)
+    {
       tmp = 0;
-}
+    }
 
     /* same formulas as used for the 'gain' */
     tmp2 = (1.0 / WARP_GAIN - 2.0) * (1.0 - 2.0 * tmp);
@@ -1062,20 +1071,23 @@ Warp(RenderData* rdat, GimpPixelFetcher* fetcher, guchar* dest, int row_stride, 
           dy2 = (fg[row2 + 1] - fg[row1 + 1]) * scale_y;
 
           tmp1 = (dx1 - dx2) * caustics_x + 1;
-          if (tmp1 < 0) {
+          if (tmp1 < 0)
+          {
             tmp1 = 0;
-}
+          }
 
           tmp2 = (dy1 - dy2) * caustics_y + 1;
-          if (tmp2 < 0) {
+          if (tmp2 < 0)
+          {
             tmp2 = 0;
-}
+          }
 
           area = tmp1 * tmp2;
 
-          if (area < 0.001) {
+          if (area < 0.001)
+          {
             area = 0.001;
-}
+          }
           area_inv = 1.0 / area;
 
           px = src_x - (int)((dx1 + dx2) * 0.5);
@@ -1087,9 +1099,10 @@ Warp(RenderData* rdat, GimpPixelFetcher* fetcher, guchar* dest, int row_stride, 
             for (i = 0; i < col_channels; i++)
             {
               v[i] = dest[i] * area_inv;
-              if (v[i] > 255.1) {
+              if (v[i] > 255.1)
+              {
                 v[i] = 255.1;
-}
+              }
               dest[i] = v[i];
             }
           }
@@ -1123,20 +1136,23 @@ Warp(RenderData* rdat, GimpPixelFetcher* fetcher, guchar* dest, int row_stride, 
                 scale_y;
 
           tmp1 = (dx1 - dx2) * caustics_x + 1;
-          if (tmp1 < 0) {
+          if (tmp1 < 0)
+          {
             tmp1 = 0;
-}
+          }
 
           tmp2 = (dy1 - dy2) * caustics_y + 1;
-          if (tmp2 < 0) {
+          if (tmp2 < 0)
+          {
             tmp2 = 0;
-}
+          }
 
           area = fabs(tmp1 * tmp2);
 
-          if (area < 0.001) {
+          if (area < 0.001)
+          {
             area = 0.001;
-}
+          }
           area_inv = 1.0 / area;
 
           x_samples = ceil(fabs(dx2 - dx1)) + 1;
@@ -1144,12 +1160,14 @@ Warp(RenderData* rdat, GimpPixelFetcher* fetcher, guchar* dest, int row_stride, 
 
           dx = (dx2 - dx1) / (x_samples - 1);
           dy = (dy2 - dy1) / (y_samples - 1);
-          if (x_samples > 6) {
+          if (x_samples > 6)
+          {
             x_samples = 6;
-}
-          if (y_samples > 6) {
+          }
+          if (y_samples > 6)
+          {
             y_samples = 6;
-}
+          }
 
           sum[0] = sum[1] = sum[2] = sum[3] = 0;
           fpy = src_y - dy1;
@@ -1176,9 +1194,10 @@ Warp(RenderData* rdat, GimpPixelFetcher* fetcher, guchar* dest, int row_stride, 
             for (i = 0; i < col_channels; i++)
             {
               sum[i] *= f2;
-              if (sum[i] > 255.1) {
+              if (sum[i] > 255.1)
+              {
                 sum[i] = 255.1;
-}
+              }
               dest[i] = sum[i];
             }
           }

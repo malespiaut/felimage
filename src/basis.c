@@ -163,7 +163,7 @@ double st_sum, st_min, st_max;
   BASE3D(NAME##_MF2, XTRA_VARS; value = 1;, VALUE_CALC; CALC_MF2;, -(pow(value, exponent) - 0.5))
 
 #define TURB3D(NAME, XTRA_VARS, VALUE_CALC, CALC_FBM, CALC_MF1, CALC_MF2, MID_VALUE, SCALING) \
-  BASE3D(NAME##_FBM, /* name */                                                               \
+  BASE3D(NAME##_FBM,       /* name */                                                         \
          double tmp = NAN; /* extra vars */                                                   \
          XTRA_VARS;                                                                           \
          value = 0;                                                                           \
@@ -204,7 +204,7 @@ double st_sum, st_min, st_max;
   BASE4D(NAME##_MF2, XTRA_VARS; value = 1;, VALUE_CALC; CALC_MF2;, -(pow(value, exponent) - 0.5))
 
 #define TURB4D(NAME, XTRA_VARS, VALUE_CALC, CALC_FBM, CALC_MF1, CALC_MF2, MID_VALUE, SCALING) \
-  BASE4D(NAME##_FBM, /* name */                                                               \
+  BASE4D(NAME##_FBM,       /* name */                                                         \
          double tmp = NAN; /* extra vars */                                                   \
          XTRA_VARS;                                                                           \
          value = 0;                                                                           \
@@ -245,7 +245,7 @@ double st_sum, st_min, st_max;
   BASE5D(NAME##_MF2, XTRA_VARS; value = 1;, VALUE_CALC; CALC_MF2;, -(pow(value, exponent) - 0.5))
 
 #define TURB5D(NAME, XTRA_VARS, VALUE_CALC, CALC_FBM, CALC_MF1, CALC_MF2, MID_VALUE, SCALING) \
-  BASE5D(NAME##_FBM, /* name */                                                               \
+  BASE5D(NAME##_FBM,       /* name */                                                         \
          double tmp = NAN; /* extra vars */                                                   \
          XTRA_VARS;                                                                           \
          value = 0;                                                                           \
@@ -746,13 +746,15 @@ SwitchBasis(int basis_fn, int dim, int multi, float p_octaves, float p_lacunarit
   /* (de)initialize data specific to the basis function */
   if (!data || new_data_type != data_type)
   {
-    if (data && basis[data_type].deinit_fn) {
+    if (data && basis[data_type].deinit_fn)
+    {
       basis[data_type].deinit_fn(data);
-}
+    }
     data = NULL;
-    if (basis[new_data_type].init_fn) {
+    if (basis[new_data_type].init_fn)
+    {
       data = basis[new_data_type].init_fn();
-}
+    }
   }
 
   /* octaves, lacunarity, weighting coefficients.. */
@@ -771,9 +773,10 @@ SwitchBasis(int basis_fn, int dim, int multi, float p_octaves, float p_lacunarit
   for (i = 0; i <= octaves; i++)
   {
     weight[i] = pow(freq, -alpha);
-    if (i == octaves) {
+    if (i == octaves)
+    {
       weight[i] *= oct_frac;
-}
+    }
     freq *= lacunarity;
     if (multi)
     {
@@ -798,9 +801,10 @@ SwitchBasis(int basis_fn, int dim, int multi, float p_octaves, float p_lacunarit
     }
   }
 
-  if (oct_frac > 0.0001) {
+  if (oct_frac > 0.0001)
+  {
     octaves++;
-}
+  }
 
   data_type = new_data_type;
 }
@@ -829,9 +833,10 @@ InitBasis(RenderData* rdat)
       break;
   }
 
-  if (state->ign_phase && dim > 3) {
+  if (state->ign_phase && dim > 3)
+  {
     dim--;
-}
+  }
 
   SwitchBasis(state->basis, dim, state->multifractal, state->octaves, state->lacunarity, state->hurst);
 }

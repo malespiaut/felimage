@@ -39,9 +39,10 @@ SaveConfig(const char* filename, PluginState* state)
   char* loc = NULL;
 
   file = fopen(filename, "wt");
-  if (!file) {
+  if (!file)
+  {
     return -1;
-}
+  }
 
   loc = setlocale(LC_NUMERIC, NULL);
   setlocale(LC_NUMERIC, "C");

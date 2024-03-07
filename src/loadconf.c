@@ -204,9 +204,10 @@ ParseIncremental(PluginState* state, char* l)
   char** tokens = NULL;
   g_strchug(l);
 
-  if (!l[0] || l[0] == '#') {
+  if (!l[0] || l[0] == '#')
+  {
     return;
-}
+  }
 
   g_strchomp(l);
 
@@ -260,9 +261,10 @@ LoadConfig(const char* filename, PluginState* state)
   char* loc = NULL;
 
   file = fopen(filename, "rt");
-  if (!file) {
+  if (!file)
+  {
     return -1;
-}
+  }
 
   SetStateToDefaults(state);
 

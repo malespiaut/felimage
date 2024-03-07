@@ -229,9 +229,10 @@ GetGradientName(const guchar* gradient_hash)
   gint tot_gradients = 0;
   int i = 0, j = 0;
 
-  if (!gradient_hash) {
+  if (!gradient_hash)
+  {
     return NULL;
-}
+  }
 
   /*g_printf("\n\nLooking for gradient with hash %s\n",GetMD5Text(gradient_hash));*/
 
@@ -319,9 +320,10 @@ run(const gchar* name,
         {
           ParseConfig(&state, param[3].data.d_string);
 
-          if (state.random_seed) {
+          if (state.random_seed)
+          {
             state.seed = g_random_int();
-}
+          }
         }
         break;
 
@@ -339,9 +341,10 @@ run(const gchar* name,
       case GIMP_RUN_WITH_LAST_VALS:
         gimp_get_data(DATA_KEY_STATE, &state);
 
-        if (state.random_seed) {
+        if (state.random_seed)
+        {
           state.seed = g_random_int();
-}
+        }
         break;
 
       default:
@@ -358,9 +361,10 @@ run(const gchar* name,
 #ifndef NOT_PLUGIN
     Render(image_ID, drawable, &state);
 #endif
-    if (run_mode != GIMP_RUN_NONINTERACTIVE) {
+    if (run_mode != GIMP_RUN_NONINTERACTIVE)
+    {
       gimp_displays_flush();
-}
+    }
 
     if (run_mode == GIMP_RUN_INTERACTIVE)
     {
