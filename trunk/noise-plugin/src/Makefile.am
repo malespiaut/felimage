@@ -51,5 +51,6 @@ AM_CPPFLAGS = \
 	@GIMP_CFLAGS@		\
 	-I$(includedir)
 
-LDADD = $(GIMP_LIBS)
+LDADD = $(GIMP_LIBS) \
+				-lm
 
