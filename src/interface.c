@@ -208,8 +208,9 @@ static void
 MakeFullPresetName(char** filename)
 {
   char* tmp = NULL;
-  if (g_str_has_suffix(*filename, PRESET_EXTENSION))
+  if (g_str_has_suffix(*filename, PRESET_EXTENSION)) {
     return;
+}
   tmp = g_malloc(strlen(*filename) + 5);
   strcpy(tmp, *filename);
   strcat(tmp, PRESET_EXTENSION);
@@ -220,8 +221,9 @@ MakeFullPresetName(char** filename)
 static void
 RemoveExtensionPresetName(char** filename)
 {
-  if (!g_str_has_suffix(*filename, PRESET_EXTENSION))
+  if (!g_str_has_suffix(*filename, PRESET_EXTENSION)) {
     return;
+}
   (*filename)[strlen(*filename) - 4] = 0;
 }
 
@@ -277,8 +279,9 @@ MakePath(const char* base, ...)
     break;
   loop:
     dir = va_arg(arg2, char*);
-    if (dir == NULL)
+    if (dir == NULL) {
       break;
+}
     tmp = path;
     path = g_build_filename(tmp, dir, NULL);
     g_free(tmp);
@@ -367,15 +370,17 @@ LoadPresetsPath(const char* path, GtkWidget* combobox, const char* selected)
 
   while ((name = g_dir_read_name(dir)) != NULL)
   {
-    if (!g_str_has_suffix(name, PRESET_EXTENSION))
+    if (!g_str_has_suffix(name, PRESET_EXTENSION)) {
       continue;
+}
 
     p_name = g_build_filename(path, name, NULL);
     file = fopen(p_name, "rt");
     g_free(p_name);
 
-    if (!file)
+    if (!file) {
       continue;
+}
     if (!fgets(buffer, 1024, file))
     {
       fclose(file);
@@ -495,8 +500,9 @@ SetWidgetsFromState(PluginState* state)
   group[3] = col_image;
   for (i = 1; i < 4; i++)
   {
-    if (!group[i])
+    if (!group[i]) {
       continue;
+}
     if (i == state->color_src)
     {
       gtk_widget_show_all(group[i]);
@@ -863,8 +869,9 @@ dialog(gint32 image_ID,
 
   for (i = 0; i < 4; i++)
   {
-    if (!col_change_cb_data.group[i])
+    if (!col_change_cb_data.group[i]) {
       continue;
+}
     if (i == tmp_state.color_src)
     {
       gtk_widget_show_all(col_change_cb_data.group[i]);
@@ -1191,8 +1198,9 @@ OnColorSrcChange(GimpIntComboBox* widget, gpointer user_data)
 
   for (i = 0; i < 4; i++)
   {
-    if (!data->group[i])
+    if (!data->group[i]) {
       continue;
+}
     if (i == col_src)
     {
       gtk_widget_show_all(data->group[i]);
